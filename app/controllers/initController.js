@@ -16,13 +16,11 @@ const renderCartPage=(req,res)=>{
     res.render('customers/cart');
 }
 
-const updateCartPage=(req,res)=>{
-    return res.json({data: "All ok"})
-}
+
 module.exports={
     renderHomePage,
     renderLoginPage,
     renderRegisterPage,
     renderCartPage,
-    updateCartPage
+    
 }
