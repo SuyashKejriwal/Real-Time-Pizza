@@ -1,6 +1,7 @@
-const renderHomePage=(req,res)=>{
-
-    res.render('home');
+const Menu=require('../models/Menu')
+const renderHomePage=async (req,res)=>{
+    const pizzas = await Menu.find()
+    res.render('home',{ pizzas:pizzas});
 }
 
 const renderLoginPage=(req,res)=>{
@@ -14,9 +15,14 @@ const renderRegisterPage=(req,res)=>{
 const renderCartPage=(req,res)=>{
     res.render('customers/cart');
 }
+
+const updateCartPage=(req,res)=>{
+    return res.json({data: "All ok"})
+}
 module.exports={
     renderHomePage,
     renderLoginPage,
     renderRegisterPage,
-    renderCartPage
+    renderCartPage,
+    updateCartPage
 }

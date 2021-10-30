@@ -10,11 +10,12 @@ const connectDB = async () => {
         })
         
         console.log(`Mongo DB Connect : ${conn.connection.host}`);
+
     } catch (err) {
         console.log(`Error : ${err.message}`);
         process.exit(1);
     }
-
+    return null;
 }
 
 module.exports = connectDB;
