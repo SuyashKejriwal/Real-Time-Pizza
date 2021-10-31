@@ -1,6 +1,11 @@
 const User=require('../models/User')
 const bcrypt=require('bcrypt');
 const passport = require('passport');
+
+const _getRedirectUrl=(req)=>{
+    return req.user.role==='admin'?'/admin/orders':'/customer/orders'
+}
+
 const postRegister= async (req,res)=>{
 
     console.log(req.body);
@@ -43,7 +48,7 @@ const postRegister= async (req,res)=>{
 }
 
 const postLogin= (req,res,next)=>{
-    console.log(req.body);
+   // console.log(req.body);
     const { email, password }   = req.body
            // Validate request 
             if(!email || !password) {
@@ -65,12 +70,18 @@ const postLogin= (req,res,next)=>{
                         return next(err)
                     }
 
-                    return res.redirect('/')
+                    return res.redirect(_getRedirectUrl(req))
                 })
             })(req, res, next)
 }
 
+const postLogout=(req,res)=>{
+    req.logout();
+    return res.redirect('/login')
+}
+
 module.exports={
     postRegister,
-    postLogin
+    postLogin,
+    postLogout
 }
