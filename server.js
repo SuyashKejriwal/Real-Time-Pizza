@@ -62,6 +62,25 @@ app.use('/customer',customerRoutes);
 app.use('/admin',adminRoutes);
 
 
-app.listen(port,()=>{
+const server=app.listen(port,()=>{
     console.log(`Listening on port ${port} `);
+})
+
+//Socket
+const io=require('socket.io')(server);
+io.on('connection',(socket)=>{
+    // private room
+    console.log(socket.id);
+    socket.on('join',(roomname)=>{
+        console.log(roomname);
+        socket.join(roomname);
+    })
+})
+
+eventEmitter.on('orderUpdated',(data)=>{
+    io.to(`order_${data.id}`).emit(`orderUpdated`,data)
+})
+
+eventEmitter.on('orderPlaced',(data)=>{
+    io.to('adminRoom').emit('orderPlaced',data)
 })

@@ -18,9 +18,16 @@ const postOrder=(req,res)=>{
     })
 
     order.save().then(result=> {
+        Order.populate(result,{path: 'customerId' },(err,placedOrder)=> {
         req.flash('success','Order placed successfully');
         delete req.session.cart
+
+        //Emit
+        const eventEmitter=req.app.get('eventEmitter');
+        eventEmitter.emit('orderPlaced',placedOrder);
         return res.redirect('/customer/orders');
+        })
+        
     }).catch(err=>{
         req.flash('error','Someting went wrong');
         return res.redirect('/cart');
@@ -38,7 +45,21 @@ const renderOrderPage=async (req,res)=>{
         moment
     })
 }
+
+const renderSingleOrderPage=async (req,res)=>{
+    const order= await Order.findById(req.params.id)
+
+    //Autherize user
+    //for object to object comparison fist convert it into string
+    if(req.user._id.toString()===order.customerId.toString()){
+       return res.render('customers/singleOrder',{order})
+    }
+
+    return res.redirect('/');
+}
+
 module.exports={
     postOrder,
-    renderOrderPage
+    renderOrderPage,
+    renderSingleOrderPage
 }
