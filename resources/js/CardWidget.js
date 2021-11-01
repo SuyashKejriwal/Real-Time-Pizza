@@ -34,6 +34,7 @@ export class CardWidget {
     async createToken() {
         try {
             const result = await this.stripe.createToken(this.card)
+            console.log(result.token);
             return result.token
         } catch(err) {
             console.log(err);

@@ -60,6 +60,9 @@ app.use('/',initRoutes);
 app.use('/cart',cartRoutes);
 app.use('/customer',customerRoutes);
 app.use('/admin',adminRoutes);
+app.use((req,res)=>{
+    res.status(404).render('errors/404')
+})
 
 
 const server=app.listen(port,()=>{
